@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAAN BHANDAR</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin: 26px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: white;
+        }
+        .tabs {
+            display: flex;
+            background-color: #f4f4f4;
+            border-bottom: 1px solid #ccc;
+        }
+        .tabs div {
+            width: 50%;
+            padding: 15px 0;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .tabs div.active {
+            border-bottom: 3px solid #ff6f61;
+            font-weight: bold;
+        }
+        .form-content {
+            padding: 20px;
+            display: none;
+        }
+        .form-content.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group input, .form-group button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .info-section {
+            background-color: #e9e9e9;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .info-section h3 {
+            margin-top: 0;
+        }
+        .table-section {
+            margin-top: 20px;
+            padding: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="/static/banner.svg" class="logo" alt="Logo">
+        <div class="tabs">
+            <div id="ngo-tab" class="active" onclick="showForm('ngo')">NGO</div>
+            <div id="goods-donor-tab" onclick="showForm('goods-donor')">Goods Donor</div>
+        </div>
+
+        <!-- NGO Form -->
+        <div id="ngo-form" class="form-content active">
+            <div class="form-group">
+                <label for="ngo-email">Email address</label>
+                <input type="email" id="ngo-email" placeholder="ngo-name@gmail.com">
+                <button onclick="startDictation('ngo-email')">🎤 Speak</button>
+            </div>
+            <div class="form-group">
+                <label for="ngo-phone">Phone number</label>
+                <input type="text" id="ngo-phone" placeholder="+91 0987654321">
+                <button onclick="startDictation('ngo-phone')">🎤 Speak</button>
+            </div>
+            <div class="form-group">
+                <label for="ngo-name">NGO Name</label>
+                <input type="text" id="ngo-name" placeholder="ATS EDUCATION TRUST">
+                <button onclick="startDictation('ngo-name')">🎤 Speak</button>
+            </div>
+            <div class="form-group">
+                <label for="ngo-location">Location (Address)</label>
+                <input type="text" id="ngo-location" placeholder="Enter location">
+                <button onclick="startDictation('ngo-location')">🎤 Speak</button>
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="submitNGO()">Login</button>
+            </div>
+
+            <!-- NGO view: donor's information -->
+            <div class="table-section" id="donor-info-section" style="display:none;">
+                <h3>Donor Information</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Image</th>
+                        </tr>
+                    </thead>
+                    <tbody id="donor-info"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Goods Donor Form -->
+        <div id="goods-donor-form" class="form-content">
+            <div class="form-group">
+                <label for="donor-email">Email address</label>
+                <input type="email" id="donor-email" placeholder="Your-name@gmail.com">
+                <button onclick="startDictation('donor-email')">🎤 Speak</button>
+            </div>
+            <div class="form-group">
+                <label for="donor-phone">Phone number</label>
+                <input type="text" id="donor-phone" placeholder="+91 0987654321">
+                <button onclick="startDictation('donor-phone')">🎤 Speak</button>
+            </div>
+            <div class="form-group">
+                <label for="donor-name">Your Name</label>
+                <input type="text" id="donor-name" placeholder="MR. Ram Kumar">
+                <button onclick="startDictation('donor-name')">🎤 Speak</button>
+            </div>
+            <div class="form-group">
+                <label for="donor-location">Your Address</label>
+                <input type="text" id="donor-location" placeholder="Enter location">
+                <button onclick="startDictation('donor-location')">🎤 Speak</button>
+            </div>
+            <div class="form-group">
+                <label for="donor-image">Upload Donation Image</label>
+                <input type="file" id="donor-image" accept="image/*">
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="submitDonor()">Submit</button>
+            </div>
+
+            <!-- Donor view: NGO's information -->
+            <div class="table-section" id="ngo-info-section" style="display:none;">
+                <h3>NGO Information</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Name</th>
+                            <th>Location</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ngo-info"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        function showForm(type) {
+            document.getElementById('ngo-form').classList.remove('active');
+            document.getElementById('goods-donor-form').classList.remove('active');
+            document.getElementById('ngo-tab').classList.remove('active');
+            document.getElementById('goods-donor-tab').classList.remove('active');
+
+            if (type === 'ngo') {
+                document.getElementById('ngo-form').classList.add('active');
+                document.getElementById('ngo-tab').classList.add('active');
+            } else {
+                document.getElementById('goods-donor-form').classList.add('active');
+                document.getElementById('goods-donor-tab').classList.add('active');
+            }
+        }
+
+        function startDictation(id) {
+            const inputField = document.getElementById(id);
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+
+            recognition.onresult = function (event) {
+                inputField.value = event.results[0][0].transcript;
+            };
+
+            recognition.start();
+        }
+
+        function submitNGO() {
+            const email = document.getElementById('ngo-email').value;
+            const phone = document.getElementById('ngo-phone').value;
+            const name = document.getElementById('ngo-name').value;
+            const location = document.getElementById('ngo-location').value;
+
+            socket.emit('ngo_data', { email, phone, name, location });
+        }
+
+        function submitDonor() {
+            const email = document.getElementById('donor-email').value;
+            const phone = document.getElementById('donor-phone').value;
+            const name = document.getElementById('donor-name').value;
+            const location = document.getElementById('donor-location').value;
+            const image = document.getElementById('donor-image').files[0];
+
+            const formData = new FormData();
+            formData.append('image', image);
+
+            // Send image and data to the server
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                if (response.ok) {
+                    socket.emit('donor_data', { email, phone, name, location });
+                }
+            });
+        }
+
+        socket.on('ngo_update', function (data) {
+            const table = document.getElementById('ngo-info');
+            let row = '<tr><td>' + data.email + '</td><td>' + data.phone + '</td><td>' + data.name + '</td><td>' + data.location + '</td></tr>';
+            table.innerHTML += row;
+            document.getElementById('ngo-info-section').style.display = 'block';
+        });
+
+        socket.on('donor_update', function (data) {
+            const table = document.getElementById('donor-info');
+            let row = '<tr><td>' + data.email + '</td><td>' + data.phone + '</td><td>' + data.name + '</td><td>' + data.location + '</td><td><img src="' + data.image_url + '" width="50" /></td></tr>';
+            table.innerHTML += row;
+            document.getElementById('donor-info-section').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
